@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ 	 	 	 	 	 	http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--放行页面-->
+    <!--pattern:放行路径,相对于本工程,security='nonr':表示放行,还可以使用匿名角色来释放资源-->
+    <!--<http pattern="/login.jsp" security="none"/>-->
+
+    <!--配置拦截路径-->
+    <!--use-expressions:禁用SPEL表达式-->
+    <http use-expressions="false">
+        <!--intercept-url:拦截路径 /*:本文件夹下的所有文件,/**:本文件夹下的所有文件及其子目录下的所有文件-->
+        <!--使用匿名角色来放行资源,匿名放行必须在拦截前面配置-->
+        <intercept-url pattern="/login*.jsp" access="ROLE_ANONYMOUS" />
+        <!--access:使通过的角色类型-->
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+        <!--form表单认证:请求拦截后,跳转到认证页面(登陆页面,默认security自己创建一个登陆认证表单),这个页面可以修改-->
+        <form-login username-parameter="username" login-page="/login.jsp" always-use-default-target="true" default-target-url="/index.jsp" login-processing-url="/login"/><!--自定义表单认证页面,需要进行放行设置,否则会抛出异常:1.重定向次数过多,2.CSRF跨域请求伪造-->
+        <!--default-target-url:认证成功后的跳转路径,默认是跳转到请求路径,always-use-default-target:配合使用-->
+        <!--login-processing-url:表单提交认证的路径,默认就是/login-->
+        <!--username-parameter:设置表单中的用户名的属性名称,默认是username-->
+        <!--关闭跨域请求伪造防护,实际开发一般不这样做,一般在认证页面加上认证的token:<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> -->
+        <csrf disabled="false"/>
+    </http>
+
+    <!--配置认证管理器-->
+    <authentication-manager>
+        <authentication-provider ><!--user-service-ref="detailsService"-->
+
+
+            <!--外部文件形式保存用户信息-->
+            <user-service properties="/WEB-INF/users.properties"/>
+        <!--    <user-service>
+                &lt;!&ndash;name:用户名,password:用户密码,authorities:授权角色类型&ndash;&gt;
+                <user name="admin" password="admin" authorities="ROLE_USER"/>
+            </user-service>-->
+        </authentication-provider>
+    </authentication-manager>
+    <!--自定义认证类-->
+    <!--<beans:bean class="com.security.demo.UserDetailsServiceImpl" id="detailsService"/>-->
+
+</beans:beans>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+ 	 	 	 	 	 	http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+    <!-- 以下页面不被拦截 -->
+    <http pattern="/login.html" security="none"/>
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/plugins/**" security="none"/>
+
+
+    <!--拦截路径-->
+    <http use-expressions="false">
+        <!--匿名角色放行资源-->
+      <!--  <intercept-url pattern="/login.html" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/css/**" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/img/**" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/js/**" access="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/plugins/**" access="ROLE_ANONYMOUS"/>-->
+        <!--拦截资源路径-->
+        <intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <!--开启表单认证-->
+        <form-login login-page="/login.html" always-use-default-target="true" default-target-url="/admin/index.html" authentication-failure-url="/login.html"/>
+        <!--关闭csrf防护-->
+        <csrf disabled="true"/>
+        <!--html框架可信-->
+        <headers>
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+        <!--登出-->
+        <logout logout-url="/logout"/>
+    </http>
+
+    <!--认证管理器配置-->
+    <authentication-manager>
+        <authentication-provider>
+            <user-service properties="/WEB-INF/users.properties"/>
+        </authentication-provider>
+    </authentication-manager>
+
+
+
+</beans:beans>
