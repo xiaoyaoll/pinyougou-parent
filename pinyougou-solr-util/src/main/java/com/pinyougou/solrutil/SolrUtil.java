@@ -26,6 +26,7 @@ public class SolrUtil {
 	
 	public void importItemData(){
 		
+		
 		TbItemExample example=new TbItemExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andStatusEqualTo("1");//审核通过的才导入的
