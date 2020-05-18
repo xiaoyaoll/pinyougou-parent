@@ -19,7 +19,7 @@ import java.util.List;
 public class CartServiceImpl implements CartService {
 
     /**
-     * 将商品添加到购物车
+     * 将商品添加到购物车 
      *
      * @param cartList 购物车列表
      * @param itemId 添加商品ID
