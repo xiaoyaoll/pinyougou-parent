@@ -39,7 +39,7 @@ public class BrandController {
 	}
 
 	/**
-	 * 新增品牌和修改品牌列表
+	 * 新增品牌和修改品牌列表 
 	 * @param tbBrand
 	 * @return
 	 */
